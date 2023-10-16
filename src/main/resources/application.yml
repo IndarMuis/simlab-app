@@ -7,7 +7,7 @@ spring:
   jpa:
     database: POSTGRESQL
     hibernate:
-#      ddl-auto: update
+    #      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -18,3 +18,5 @@ jwt:
   header: 'Authorization'
   prefix: 'Bearer '
   expiration: 70000
+  issuer: 'simlab-app'
+  secret: CBE967D33B28E374688ABFA97FDB5

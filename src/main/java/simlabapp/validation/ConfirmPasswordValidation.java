@@ -1,4 +1,4 @@
-package simlabapp.validation.annotation;
+package simlabapp.validation;
 
 public @interface ConfirmPasswordValidation {
 }

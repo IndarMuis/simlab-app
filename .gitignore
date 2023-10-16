@@ -20,7 +20,7 @@ target/
 *.ipr
 postgresql.sql
 test.http
-./src/main/resources/**
+/src/main/resources/**
 
 ### NetBeans ###
 /nbproject/private/
