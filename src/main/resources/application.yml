@@ -19,4 +19,4 @@ jwt:
   prefix: 'Bearer '
   expiration: 70000
   issuer: 'simlab-app'
-  secret: CBE967D33B28E374688ABFA97FDB5
+  secret: NcpY92ALsniDR2K8I/YiJbl5Jl3MWlS5GbmtzMqQj0MaHgNIsjzKTNmLrDZ7Uy0C2orSFnn/gmyvYWHIXV2JtrUEpvrDKnsaAywJVvG3xrc=

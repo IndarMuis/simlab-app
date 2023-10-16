@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -15,15 +16,16 @@ import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 
+@Slf4j
 @Service
 public class JwtAuthService {
 
     public String generateToken(Authentication authentication) {
-        Account account = (Account) authentication.getPrincipal();
+        String username = (String) authentication.getPrincipal();
         Date expiredDate =
                 Date.from(Instant.now().plusSeconds(JwtAuthConstant.JWT_EXPIRATION));
         return Jwts.builder()
-                .claim("username", account.getUsername())
+                .claim("username", username)
                 .setHeaderParam("typ", "JWT")
                 .setIssuer(JwtAuthConstant.JWT_ISSUER)
                 .setExpiration(expiredDate)
