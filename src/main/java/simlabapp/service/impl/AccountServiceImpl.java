@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid username or password");
         }
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(account.getUsername(), null, account.getAuthorities());
+                new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword(), account.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String accessToken = jwtAuthService.generateToken(authentication);

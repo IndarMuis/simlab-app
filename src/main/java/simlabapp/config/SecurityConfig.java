@@ -7,12 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import simlabapp.security.filter.JwtAuthFilter;
 import simlabapp.security.handler.CustomAccessDeniedHandler;
 import simlabapp.security.handler.CustomAuthEntryPointHandler;
 
@@ -20,10 +24,12 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+//@EnableMethodSecurity
 public class SecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthEntryPointHandler customAuthEntryPointHandler;
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,8 +53,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(customAuthEntryPointHandler)
-                        .accessDeniedHandler(customAccessDeniedHandler))
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .authorizeHttpRequests(request -> request
+                        //.requestMatchers("/test/**").hasRole("ADMIN")
                         .requestMatchers("/v1/api-docs",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
@@ -62,6 +70,7 @@ public class SecurityConfig {
                                 "/api/v1/**").permitAll()
                         .anyRequest().permitAll()
                 )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
