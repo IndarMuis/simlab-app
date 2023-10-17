@@ -24,7 +24,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-//@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = false)
 public class SecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/swagger-ui.html",
                                 "/api/v1/**").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
