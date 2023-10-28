@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,13 +36,13 @@ public class CreateAssistantRequest {
     @NotBlank
     private String placeOfBirth;
 
-    @NotBlank
+    @NotNull
     private Date dateOfBirth;
 
-    @NotBlank
+    @NotNull
     private Major major;
 
-    @NotBlank
+    @NotNull
     private Gender gender;
 
     private String imageProfile;

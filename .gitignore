@@ -21,6 +21,7 @@ target/
 postgresql.sql
 test.http
 /src/main/resources/**
+#/server/**
 
 ### NetBeans ###
 /nbproject/private/

@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,8 +38,11 @@ public class Account implements UserDetails {
     )
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
     private Assistant assistant;
+
+    @OneToMany(mappedBy = "account")
+    private List<Document> documents;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

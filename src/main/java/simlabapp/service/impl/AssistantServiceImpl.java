@@ -1,10 +1,13 @@
 package simlabapp.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import simlabapp.dto.request.CreateAssistantRequest;
 import simlabapp.entity.Account;
@@ -15,8 +18,14 @@ import simlabapp.repository.AssistantRepository;
 import simlabapp.repository.RoleRepository;
 import simlabapp.service.AssistantService;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AssistantServiceImpl implements AssistantService {
@@ -25,6 +34,7 @@ public class AssistantServiceImpl implements AssistantService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ResourceLoader resourceLoader;
 
     @Transactional
     @Override
@@ -52,5 +62,15 @@ public class AssistantServiceImpl implements AssistantService {
                 .gender(request.getGender())
                 .account(saveAccount).build();
         assistantRepository.save(assistant);
+    }
+
+    @Override
+    public void uploadImageProfile(MultipartFile image) throws IOException {
+        try {
+            InputStream inputStream = image.getInputStream();
+            Files.copy(inputStream, Path.of("src/main/resources/documents/" + image.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
