@@ -4,13 +4,13 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import simlabapp.entity.Account;
 
 import java.security.Key;
 import java.time.Instant;
@@ -18,16 +18,19 @@ import java.util.Date;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtAuthService {
+
+    private final JwtConfig jwtConfig;
 
     public String generateToken(Authentication authentication) {
         String username = (String) authentication.getPrincipal();
         Date expiredDate =
-                Date.from(Instant.now().plusSeconds(JwtAuthConstant.JWT_EXPIRATION));
+                Date.from(Instant.now().plusSeconds(jwtConfig.getExpiration()));
         return Jwts.builder()
                 .claim("username", username)
                 .setHeaderParam("typ", "JWT")
-                .setIssuer(JwtAuthConstant.JWT_ISSUER)
+                .setIssuer(jwtConfig.getIssuer())
                 .setExpiration(expiredDate)
                 .signWith(generateSecretKey(), SignatureAlgorithm.HS256).compact();
     }
@@ -53,7 +56,7 @@ public class JwtAuthService {
     }
 
     private Key generateSecretKey() {
-        byte[] bytes = Decoders.BASE64.decode(JwtAuthConstant.SECRET);
+        byte[] bytes = Decoders.BASE64.decode(jwtConfig.getSecret());
         return Keys.hmacShaKeyFor(bytes);
     }
 

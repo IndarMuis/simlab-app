@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 import simlabapp.entity.Account;
-import simlabapp.security.jwt.JwtAuthConstant;
+import simlabapp.security.jwt.JwtConfig;
 import simlabapp.security.jwt.JwtAuthService;
 import simlabapp.service.impl.UserDetailsServiceImpl;
 
@@ -27,6 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthService jwtAuthService;
+    private final JwtConfig jwtConfig;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -50,9 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private String getTokenFromHeader(HttpServletRequest request) {
-        String authorization = request.getHeader(JwtAuthConstant.AUTH_HEADER);
-        if (Strings.hasText(authorization) && authorization.startsWith(JwtAuthConstant.JWT_PREFIX)) {
-            return authorization.substring(JwtAuthConstant.JWT_PREFIX.length());
+        String authorization = request.getHeader(jwtConfig.getHeader());
+        if (Strings.hasText(authorization) && authorization.startsWith(jwtConfig.getPrefix())) {
+            return authorization.substring(jwtConfig.getPrefix().length());
         }
         return null;
     }

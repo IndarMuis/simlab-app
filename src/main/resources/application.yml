@@ -5,7 +5,7 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
       maximum-pool-size: 10
-    url: jdbc:postgresql://${DATABASE_ADDR:localhost}/${DATABASE_NAME:db_simlab}?reWriteBatchedInserts=true
+    url: jdbc:postgresql://${DATABASE_ADDR:localhost}/${DATABASE_NAME:db_simlab}
     username: ${DATABASE_USER:postgres}
     password: ${DATABASE_PASSWORD:al0homora}
     driver-class-name: org.postgresql.Driver
